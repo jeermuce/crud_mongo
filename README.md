@@ -11,8 +11,8 @@ This application allows you to perform CRUD (Create, Read, Update, and Delete) o
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   git clone https://github.com/jeermuce/crud_mongo.git
+   cd crud_mongo
 2. **Create and activate a virtual environment:**
 
 ```bash
