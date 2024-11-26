@@ -9,6 +9,7 @@ from pymongo.collection import Collection
 from typing import Optional, Dict, Any
 
 
+
 MONGO_URI:str= 'mongodb://localhost';
 
 
@@ -260,8 +261,6 @@ def query_constructor(**kwargs: Any) -> dict[str, Any]:
 
 
 
-from typing import Optional, Dict, Any
-from pymongo.collection import Collection
 
 def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: Optional[str] = None, 
                     job: Optional[str] = None, sal: Optional[float] = None, deptno: Optional[int] = None, 
@@ -400,32 +399,7 @@ def format_one_employee(emp: dict[str, Any]) -> str:
 def format_all_employees(empleados: list[dict[str, object]]) -> str:
     return "\n".join([format_one_employee(emp) for emp in empleados])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import tkinter as tk
-from tkinter import messagebox
-from pymongo import MongoClient
-from pymongo.collection import Collection
-from typing import Optional, Dict, Any
-
-# Your existing functions like read_employee, query_constructor, format_one_employee, format_all_employees...
-
-def check_fields(*args):  # Assuming this function exists to enable/disable the create button
+def check_fields(*args):
     if entry_empno.get() and entry_ename.get() and entry_job.get() and entry_sal.get() and entry_deptno.get() and entry_dname.get() and entry_loc.get():
         create_button.config(state=tk.NORMAL)
     else:
@@ -434,7 +408,6 @@ def check_fields(*args):  # Assuming this function exists to enable/disable the 
 root = tk.Tk()
 root.title("Recursos Humanos")
 
-# Create input fields
 tk.Label(root, text="Número:").grid(row=0, column=0)
 entry_empno = tk.Entry(root)
 entry_empno.grid(row=0, column=1)
@@ -480,6 +453,5 @@ tk.Button(root, text="Eliminar", command=delete_employee_gui).grid(row=8, column
 
 tk.Button(root, text="Ver todos", command=ver_todos).grid(row=9, column=0, columnspan=2)
 
-# Start the application
-collection_rh = connect_to_mongo("rh")
+del collection_rh
 root.mainloop()
