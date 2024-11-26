@@ -2,13 +2,18 @@
 A CRUD GUI program for managing employee data in a MongoDB collection.
 
 This program uses Tkinter to provide a graphical user interface (GUI) for
-creating, reading, updating, and deleting employee records stored in a MongoDB database.
-It also provides utility functions for interacting with the database and displaying
-data in a user-friendly format.
+creating, reading, updating, and deleting employee records stored in a MongoDB
+database.
+It is rather limited in functionality, but it serves as a simple example of how
+to interact with a MongoDB database using Python and Tkinter.
 
 Author: JEERMUCE
 """
-
+"""
+These next 3 lines are necessary to avoid the following error while on windows,
+they should be removed while on linux:
+`_tkinter.TclError: Can't find a usable init.tcl in the following directories:`
+"""
 import os
 os.environ['TCL_LIBRARY'] = 'C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python313\\tcl\\tcl8.6'
 os.environ['TK_LIBRARY'] = 'C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python313\\tcl\\tk8.6'
