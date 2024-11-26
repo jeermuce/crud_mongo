@@ -260,8 +260,8 @@ def query_constructor(**kwargs: Any) -> dict[str, Any]:
     return query
 
 
-def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: Optional[str] = None, 
-                    job: Optional[str] = None, sal: Optional[float] = None, deptno: Optional[int] = None, 
+def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: Optional[str] = None,
+                    job: Optional[str] = None, sal: Optional[float] = None, deptno: Optional[int] = None,
                     dname: Optional[str] = None, loc: Optional[str] = None) -> Dict[str, Any] | None:
     update_fields: Dict[str, Any] = {}
 
@@ -271,14 +271,19 @@ def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: O
         update_fields["job"] = job.upper()
     if sal is not None:
         update_fields["sal"] = sal
-    if any([deptno, dname, loc]):
-        update_fields["departamento"] = {}
-        if deptno is not None:
-            update_fields["departamento"]["deptno"] = deptno
-        if dname is not None:
-            update_fields["departamento"]["dname"] = dname.upper()
-        if loc is not None:
-            update_fields["departamento"]["loc"] = loc.upper()
+
+
+    current_emp = collection.find_one({"empno": empno})
+    if current_emp and "departamento" in current_emp:
+        update_fields["departamento"] = current_emp["departamento"]
+
+
+    if deptno is not None:
+        update_fields.setdefault("departamento", {})["deptno"] = deptno
+    if dname is not None:
+        update_fields.setdefault("departamento", {})["dname"] = dname.upper()
+    if loc is not None:
+        update_fields.setdefault("departamento", {})["loc"] = loc.upper()
 
     try:
         if update_fields:
@@ -287,9 +292,10 @@ def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: O
         else:
             print("No fields to update")
     except Exception as e:
-        print("Error al actualizar empleado: {}".format(e))
+        print(f"Error al actualizar empleado: {e}")
     finally:
         return collection.find_one({"empno": empno}, {"empno": 1, "ename": 1, "job": 1, "sal": 1, "departamento": 1, "_id": 0})
+
 
 
 #delete
@@ -444,7 +450,6 @@ entry_loc = tk.Entry(root)
 entry_loc.grid(row=6, column=1)
 entry_loc.bind("<KeyRelease>", check_fields)
 
-# Create buttons for CRUD operations
 create_button = tk.Button(root, text="Crear", command=create_employee_gui, state=tk.DISABLED)
 create_button.grid(row=7, column=0)
 
