@@ -51,7 +51,7 @@ pyinstaller --onefile app.py
 ## Usage
 Fill in the employee details in the form and click "Create Employee" to add a new employee.
 
-Enter an employee name and click "Read Employee" to view details.
+Enter an employee name or number and click "Read Employee" to view details.
 
 Update the employee details and click "Update Employee" to modify existing data, the key is the EmpNo, other fields are optional.
 
