@@ -4,8 +4,21 @@ This application allows you to perform CRUD (Create, Read, Update, and Delete) o
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.10+
 - MongoDB
+
+
+## In Windows
+
+If an error `_tkinter.TclError: Can't find a usable init.tcl in the following directories:`
+occurs, add these at the top of app.py and replace `<username>` with your Windows username and `<python_version>` with the correct directory in your system
+
+```python
+import os
+os.environ['TCL_LIBRARY'] = 'C:\\Users\\<username>\\AppData\\Local\\Programs\\Python\\<python_version>\\tcl\\tcl8.6'
+os.environ['TK_LIBRARY'] = 'C:\\Users\\<username>\\AppData\\Local\\Programs\\Python\\<python_version>\\tcl\\tk8.6'
+```
+
 
 ## Setup
 
