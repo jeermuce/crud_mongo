@@ -30,10 +30,11 @@ pip install -r requirements.txt
 python app.py
 ```
 
-4. **Pyinstall the application**
+4. **Pyinstall the application** !!NOT RECOMMENDED!!
 ```bash
 pyinstaller --onefile app.py
 ```
+    the executable will be in the dist folder
 ## Usage
 Fill in the employee details in the form and click "Create Employee" to add a new employee.
 
