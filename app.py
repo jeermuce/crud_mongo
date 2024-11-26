@@ -197,7 +197,7 @@ def connect_to_mongo(col: str) -> Collection[dict[str, object]]:
 
 
 def list_empno_ename_loc(collection: Collection[dict[str, object]]) -> list[dict[str, object]]:
-    empleados = list(collection.find({}, {"empno": 1, "ename": 1, "departamento.dname": 1 , "departamento.deptno": 1 , "_id": 0}))
+    empleados = list(collection.find({}, { "_id": 0}))
     return empleados
 
 #crud
@@ -206,20 +206,21 @@ def create_employee(collection: Collection[dict[str, object]], empno: int, ename
     try:
         collection.insert_one({
             "empno": empno,
-            "ename": ename,
-            "job": job,
+            "ename": ename.upper(),
+            "job": job.upper(),
             "sal": sal,
             "departamento": {
                 "deptno": deptno,
-                "dname": dname,
-                "loc": loc
+                "dname": dname.upper(),
+                "loc": loc.upper()
             }
         })
         print("Empleado insertado correctamente")
-    except Exception:
-        print("Error al insertar empleado: {}".format(Exception))
+    except Exception as e:
+        print("Error al insertar empleado: {}".format(e))
     finally:
-        return collection.find_one({"empno": empno},{ "_id": 0})
+        return collection.find_one({"empno": empno}, {"_id": 0})
+
 
 #read
 def read_employee(collection: Collection[dict[str, object]], **kwargs) -> list[dict[str, object]]:
@@ -238,7 +239,6 @@ def read_employee(collection: Collection[dict[str, object]], **kwargs) -> list[d
 
     return empleados
 
-
 def query_constructor(**kwargs: Any) -> dict[str, Any]:
     query: dict[str, Any] = {}
     for key, value in kwargs.items():
@@ -246,20 +246,18 @@ def query_constructor(**kwargs: Any) -> dict[str, Any]:
             if key == "empno":
                 query["empno"] = value
             elif key == "ename":
-                query["ename"] = value
+                query["ename"] = value.upper()
             elif key == "job":
-                query["job"] = value
+                query["job"] = value.upper()
             elif key == "sal":
                 query["sal"] = value
             elif key == "deptno":
                 query["departamento.deptno"] = value
             elif key == "dname":
-                query["departamento.dname"] = value
+                query["departamento.dname"] = value.upper()
             elif key == "loc":
-                query["departamento.loc"] = value
+                query["departamento.loc"] = value.upper()
     return query
-
-
 
 
 def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: Optional[str] = None, 
@@ -268,9 +266,9 @@ def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: O
     update_fields: Dict[str, Any] = {}
 
     if ename is not None:
-        update_fields["ename"] = ename
+        update_fields["ename"] = ename.upper()
     if job is not None:
-        update_fields["job"] = job
+        update_fields["job"] = job.upper()
     if sal is not None:
         update_fields["sal"] = sal
     if any([deptno, dname, loc]):
@@ -278,9 +276,9 @@ def update_employee(collection: Collection[dict[str, Any]], empno: int, ename: O
         if deptno is not None:
             update_fields["departamento"]["deptno"] = deptno
         if dname is not None:
-            update_fields["departamento"]["dname"] = dname
+            update_fields["departamento"]["dname"] = dname.upper()
         if loc is not None:
-            update_fields["departamento"]["loc"] = loc
+            update_fields["departamento"]["loc"] = loc.upper()
 
     try:
         if update_fields:
@@ -393,8 +391,11 @@ def delete_employee_gui():
 def ver_todos():
     empleados = list_empno_ename_loc(collection_rh)
     messagebox.showinfo("Empleados", f"{format_all_employees(empleados)}")
+
+
 def format_one_employee(emp: dict[str, Any]) -> str:
-    return f"empno {emp['empno']} - ename {emp['ename']} - dname {emp['departamento']['dname']} - dno {emp['departamento']['deptno']}"
+    return f"empno {emp['empno']} - ename {emp['ename']} - job {emp.get('job', 'N/A')} - sal {emp.get('sal', 'N/A')} - dno {emp['departamento']['deptno']} - dname {emp['departamento']['dname']} - loc {emp['departamento'].get('loc', 'N/A')}"
+
 
 def format_all_employees(empleados: list[dict[str, object]]) -> str:
     return "\n".join([format_one_employee(emp) for emp in empleados])
@@ -453,5 +454,5 @@ tk.Button(root, text="Eliminar", command=delete_employee_gui).grid(row=8, column
 
 tk.Button(root, text="Ver todos", command=ver_todos).grid(row=9, column=0, columnspan=2)
 
-del collection_rh
+
 root.mainloop()
